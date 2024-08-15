@@ -12,6 +12,7 @@ import android.os.Handler;
 
 import com.example.virtualtravelapp.fragment.AccountFragment;
 import com.example.virtualtravelapp.fragment.AdminFragment;
+import com.example.virtualtravelapp.fragment.BookedTourFragment;
 import com.google.android.material.navigation.NavigationView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -24,7 +25,6 @@ import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -90,53 +90,54 @@ public class MainActivity extends AppCompatActivity {
 		db = new DBManager(this);
 		db.openDataBase();
 		navigationView.setItemIconTintList(null);
-		navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-			@Override
-			public boolean onNavigationItemSelected(MenuItem item) {
-				item.setCheckable(true);
-				switch (item.getItemId()) {
-					case R.id.nav_diadanh:
-						startFragment(new DiaDanhFragment());
-						drawerLayout.closeDrawers();
-						return true;
-					case R.id.nav_favorite:
-						startFragment(new FavoriteFragment());
-						drawerLayout.closeDrawers();
-						return true;
-					case R.id.nav_experience:
-						startFragment(new ExpFragment());
-						drawerLayout.closeDrawers();
-						return true;
-					case R.id.nav_admin:
-						drawerLayout.closeDrawers();
-						startFragment(new AdminFragment());
-						return true;
-					case R.id.nav_account:
-						drawerLayout.closeDrawers();
-						startFragment(new AccountFragment());
-						return true;
-					case R.id.nav_update:
-						drawerLayout.closeDrawers();
-						showAlertDialog();
-						return true;
-					case R.id.nav_information:
-						drawerLayout.closeDrawers();
-						showDialogInfo();
-						return true;
-					case R.id.nav_send_mail:
-						Intent emailIntent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "ngocphongstudent2611@gmail.com", null));
-						emailIntent.putExtra("android.intent.extra.SUBJECT", "Phản hồi");
-						startActivity(Intent.createChooser(emailIntent, "Phản hồi"));
-						break;
-					case R.id.nav_logout:
-						Intent logoutIntent = new Intent(MainActivity.this, LoginActivity.class);
-						startActivity(logoutIntent);
-						Toast.makeText(MainActivity.this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
-						finish();
-						break;
-				}
-				return false;
+		navigationView.setNavigationItemSelectedListener(item -> {
+			item.setCheckable(true);
+			switch (item.getItemId()) {
+				case R.id.nav_diadanh:
+					startFragment(new DiaDanhFragment());
+					drawerLayout.closeDrawers();
+					return true;
+				case R.id.nav_favorite:
+					startFragment(new FavoriteFragment());
+					drawerLayout.closeDrawers();
+					return true;
+				case R.id.nav_experience:
+					startFragment(new ExpFragment());
+					drawerLayout.closeDrawers();
+					return true;
+				case R.id.nav_admin:
+					drawerLayout.closeDrawers();
+					startFragment(new AdminFragment());
+					return true;
+				case R.id.nav_booked_tour:
+					drawerLayout.closeDrawers();
+					startFragment(new BookedTourFragment());
+					return true;
+				case R.id.nav_account:
+					drawerLayout.closeDrawers();
+					startFragment(new AccountFragment());
+					return true;
+				case R.id.nav_update:
+					drawerLayout.closeDrawers();
+					showAlertDialog();
+					return true;
+				case R.id.nav_information:
+					drawerLayout.closeDrawers();
+					showDialogInfo();
+					return true;
+				case R.id.nav_send_mail:
+					Intent emailIntent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "ngocphongstudent2611@gmail.com", null));
+					emailIntent.putExtra("android.intent.extra.SUBJECT", "Phản hồi");
+					startActivity(Intent.createChooser(emailIntent, "Phản hồi"));
+					break;
+				case R.id.nav_logout:
+					Intent logoutIntent = new Intent(MainActivity.this, LoginActivity.class);
+					startActivity(logoutIntent);
+					Toast.makeText(MainActivity.this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
+					finish();
+					break;
 			}
+			return false;
 		});
 	}
 

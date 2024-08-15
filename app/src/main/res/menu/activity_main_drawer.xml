@@ -18,6 +18,10 @@
             android:id="@+id/nav_admin"
             android:icon="@drawable/ic_star"
             android:title="Admin"></item>
+        <item
+            android:id="@+id/nav_booked_tour"
+            android:icon="@drawable/ic_travel"
+            android:title="Tour đã đặt"></item>
     </group>
 
 

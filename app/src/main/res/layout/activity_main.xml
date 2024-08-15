@@ -26,6 +26,7 @@
             android:background="@android:color/background_light"
             >
         </FrameLayout>
+
     </RelativeLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

@@ -20,16 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VirtualTravelApp">
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="2881012138690358"/>
-        <activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            tools:replace="android:theme"/>
-        <provider
-            android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider2881012138690358"
-            android:exported="true" />
+
 
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6843926878275771~2070749431"/>
@@ -96,6 +87,14 @@
             android:theme="@style/ThemeDiaDanh"></activity>
         <activity
             android:name=".activity.AdminDiaDanhActivity"
+            android:theme="@style/ThemeDiaDanh"></activity>
+        <activity
+            android:name=".activity.BookingActivity"
+            android:label="Đặt tour"
+            android:theme="@style/ThemeDiaDanh"></activity>
+        <activity
+            android:name=".activity.BookingSuccess"
+            android:label="Đặt tour thành công"
             android:theme="@style/ThemeDiaDanh"></activity>
     </application>
 

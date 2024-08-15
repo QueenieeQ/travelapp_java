@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_diadanh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -163,6 +164,34 @@
               android:textColor="#000"
               android:textSize="18sp"/>
       </TableRow>
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@android:color/darker_gray" />
+
+      <TableRow
+          android:id="@+id/tableViewBooking"
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1"
+          android:gravity="center_vertical">
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_margin="12dp"
+              android:src="@drawable/ic_add" />
+
+          <TextView
+              android:id="@+id/tvBooking"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Đặt tour"
+              android:textColor="#000"
+              android:textSize="18sp" />
+      </TableRow>
+
       <View
           android:layout_width="match_parent"
           android:layout_height="1dp"

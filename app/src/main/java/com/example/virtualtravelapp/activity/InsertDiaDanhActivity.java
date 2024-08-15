@@ -17,14 +17,16 @@ import com.example.virtualtravelapp.database.DBManager;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+
 public class InsertDiaDanhActivity extends AppCompatActivity {
 
     EditText edtName, edtLat, edtLng, edtImage, edtImageDetail1, edtImageDetail2,
-            edtImageDetail3, edtImageDetail4, edtCity;
+            edtImageDetail3, edtImageDetail4, edtCity,edtPrice, edtQuantity;
     Button btnThem, btnThoat;
     Spinner spnRegion;
     DBManager db;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +66,8 @@ public class InsertDiaDanhActivity extends AppCompatActivity {
         edtImageDetail3 = (EditText) findViewById(R.id.edtInsertDiaDanhImageDetail3);
         edtImageDetail4 = (EditText) findViewById(R.id.edtInsertDiaDanhImageDetail4);
         edtCity = (EditText) findViewById(R.id.edtInsertDiaDanhCity);
+        edtPrice = (EditText) findViewById(R.id.price);
+        edtQuantity = (EditText) findViewById(R.id.quantity);
         spnRegion = (Spinner) findViewById(R.id.spnInsertDiaDanhRegion);
         btnThem = (Button) findViewById(R.id.btnInsertDiaDanhThem);
         btnThoat = (Button) findViewById(R.id.btnInsertDiaDanhThoat);
@@ -80,6 +84,8 @@ public class InsertDiaDanhActivity extends AppCompatActivity {
         String lat = edtLat.getText().toString().trim();
         String lng = edtLng.getText().toString().trim();
         String region = spnRegion.getSelectedItem().toString().trim();
+        String price = edtPrice.getText().toString().trim();
+        String quantity = edtQuantity.getText().toString().trim();
         int regionValue = -1;
         if (name == "" || image == "" || imageDetail1 == "" || imageDetail2 == "" ||
                 imageDetail3 == "" || imageDetail4 == "" || city == "" || lat =="" || lng == "") {
@@ -100,7 +106,7 @@ public class InsertDiaDanhActivity extends AppCompatActivity {
                     break;
             }
             db.openDataBase();
-            int result = db.addDiaDanh(name, img, latlng, regionValue, city, 0);
+            int result = db.addDiaDanh(name, img, latlng, regionValue, city, 0, parseStringToInt(price), parseStringToInt(quantity));
             if (result == 1) {
                 Toast.makeText(InsertDiaDanhActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(InsertDiaDanhActivity.this, AdminDiaDanhActivity.class));
@@ -108,6 +114,13 @@ public class InsertDiaDanhActivity extends AppCompatActivity {
             else {
                 Toast.makeText(InsertDiaDanhActivity.this, "Thêm thất bại", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+    public static int parseStringToInt(String input) {
+        try {
+            return Integer.parseInt(input.trim());
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
     @Override

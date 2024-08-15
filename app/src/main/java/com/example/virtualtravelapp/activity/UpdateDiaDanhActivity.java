@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class UpdateDiaDanhActivity extends AppCompatActivity {
 
     EditText edtName, edtLat, edtLng, edtImage, edtImageDetail1, edtImageDetail2,
-            edtImageDetail3, edtImageDetail4, edtCity;
+            edtImageDetail3, edtImageDetail4, edtCity,edtPrice, edtQuantity;
     Button btnSua, btnThoat;
     Spinner spnRegion, spnFavorite;
     DBManager db;
@@ -74,6 +74,8 @@ public class UpdateDiaDanhActivity extends AppCompatActivity {
         edtImageDetail3 = (EditText) findViewById(R.id.edtUpdateDiaDanhImageDetail3);
         edtImageDetail4 = (EditText) findViewById(R.id.edtUpdateDiaDanhImageDetail4);
         edtCity = (EditText) findViewById(R.id.edtUpdateDiaDanhCity);
+        edtPrice = (EditText) findViewById(R.id.tv_price);
+        edtQuantity = (EditText) findViewById(R.id.tv_quantity);
         spnRegion = (Spinner) findViewById(R.id.spnUpdateDiaDanhRegion);
         spnFavorite = (Spinner) findViewById(R.id.spnUpdateDiaDanhFavorite);
         btnSua = (Button) findViewById(R.id.btnUpdateDiaDanhSua);
@@ -93,6 +95,8 @@ public class UpdateDiaDanhActivity extends AppCompatActivity {
         edtImageDetail3.setText(image[3]);
         edtImageDetail4.setText(image[4]);
         edtCity.setText(diaDanh.getCity());
+        edtPrice.setText(String.valueOf(diaDanh.getPrice()));
+        edtQuantity.setText(String.valueOf(diaDanh.getQuantity()));
         switch (diaDanh.getRegions()) {
             case 1:
                 spnRegion.setSelection(0);
@@ -122,6 +126,8 @@ public class UpdateDiaDanhActivity extends AppCompatActivity {
         String imageDetail3 = edtImageDetail3.getText().toString().trim();
         String imageDetail4 = edtImageDetail4.getText().toString().trim();
         String city = edtCity.getText().toString().trim();
+        int price = Integer.parseInt(edtPrice.getText().toString().trim());
+        int quantity = Integer.parseInt(edtQuantity.getText().toString().trim());
         String lat = edtLat.getText().toString().trim();
         String lng = edtLng.getText().toString().trim();
         String region = spnRegion.getSelectedItem().toString().trim();
@@ -154,7 +160,7 @@ public class UpdateDiaDanhActivity extends AppCompatActivity {
                     break;
             }
             db.openDataBase();
-            int result = db.editDiaDanh(id, name, img, latlng, regionValue, city, favoriteValue);
+            int result = db.editDiaDanh(id, name, img, latlng, regionValue, city, favoriteValue,price,quantity);
             if (result == 1) {
                 Toast.makeText(UpdateDiaDanhActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(UpdateDiaDanhActivity.this, AdminDiaDanhActivity.class);

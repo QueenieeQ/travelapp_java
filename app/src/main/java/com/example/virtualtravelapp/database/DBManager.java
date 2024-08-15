@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.virtualtravelapp.model.Booking;
 import com.example.virtualtravelapp.model.DiaDanh;
 import com.example.virtualtravelapp.model.Experience;
 import com.example.virtualtravelapp.model.Hotel;
@@ -23,11 +24,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DBManager extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "dulich.sqlite";
-    public static final int DATABASE_VERSION = 12;
+    public static final int DATABASE_VERSION = 18;
     public static final String TABLE_DIADANH = "diadanh";
+    public static final String TABLE_BOOKING = "booktour";
 
     public static final String COLUMN_ID_DIADANH = "ID_DIADANH";
     public static final String COLUMN_NAME = "NAME";
@@ -37,6 +40,7 @@ public class DBManager extends SQLiteOpenHelper {
     public static final String COLUMN_REGIONS = "REGIONS";
     public static final String COLUMN_CITY = "CITY";
     public static final String COLUMN_FAVORITE = "FAVORITE";
+    public static final String COLUMN_QUANTITY = "quantity";
 
     public static final String TABLE_PLACE = "diemdi";
     public static final String COLUMN_ID = "ID";
@@ -49,6 +53,7 @@ public class DBManager extends SQLiteOpenHelper {
     public static final String TABLE_HOTEL = "nhanghi";
     public static final String COLUMN_PHONE = "PHONE";
     public static final String COLUMN_PRICE = "PRICE";
+    public static final String COLUMN_PRICE_LOWERCASE = "price";
 
     public static final String TABLE_RESTAURANT = "doan";
     public static final String TABLE_TOUR = "lichtrinh";
@@ -73,12 +78,20 @@ public class DBManager extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        addNewColumns(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+addNewColumns(db);
+    }
+    private void addNewColumns(SQLiteDatabase db) {
+        try {
+            db.execSQL("ALTER TABLE DiaDanh ADD COLUMN price INTEGER;");
+            db.execSQL("ALTER TABLE DiaDanh ADD COLUMN quantity INTEGER;");
+        } catch (Exception e) {
+            Log.e("DBManager", "Error adding new columns", e);
+        }
     }
 
     public void CopyDataBaseFromAsset() throws IOException {
@@ -150,6 +163,48 @@ public class DBManager extends SQLiteOpenHelper {
         }
         Log.d("ketqua", String.valueOf(list));
         return list;
+    }
+
+    public void addBooking(Booking booking) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, booking.getName());
+        values.put(COLUMN_PRICE, booking.getPrice());
+        values.put(COLUMN_QUANTITY, booking.getQuantity());
+
+        db.insert(TABLE_BOOKING, null, values);
+        db.close();
+    }
+
+    public List<Booking> getAllBookTours() {
+        List<Booking> bookTours = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT * FROM booktour";
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String title = cursor.getString(cursor.getColumnIndex("name"));
+                String image = "";
+                int price = cursor.getInt(cursor.getColumnIndex(DBManager.COLUMN_PRICE_LOWERCASE));
+                int quantity = cursor.getInt(cursor.getColumnIndex(DBManager.COLUMN_QUANTITY));
+
+                Booking bookTour = new Booking(title, image,price, quantity);
+                bookTours.add(bookTour);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return bookTours;
+    }
+
+    public void deleteBooking(Booking booking) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String whereClause = "name = ?";
+        String[] whereArgs = new String[]{booking.getName()};
+
+        db.delete("booktour", whereClause, whereArgs);
+        db.close();
     }
 
     public User getUserByUsername(String username) {
@@ -254,29 +309,76 @@ public class DBManager extends SQLiteOpenHelper {
             String city = cursor.getString(5);
             int favorite = cursor.getInt(6);
             String imageInt = cursor.getString(7);
+            int price = cursor.getInt(8);
+            int quantity = cursor.getInt(9);
             list.add(new DiaDanh(idDiaDanh, nameDiaDanh, imDiaDanh, imageInt,
-                    latlng, city, regions, favorite));
+                    latlng, city, regions, favorite, price, quantity));
         }
         return list;
     }
 
     public DiaDanh getDiaDanhByID(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        DiaDanh diaDanh = new DiaDanh();
+        DiaDanh diaDanh = null;
+
         String sql = "SELECT * FROM " + DBManager.TABLE_DIADANH + " WHERE " + DBManager.COLUMN_ID_DIADANH + " = " + id;
         Cursor cursor = db.rawQuery(sql, null);
-        if (cursor.moveToFirst()) {
-            diaDanh.setIdDiaDanh(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_ID_DIADANH))));
-            diaDanh.setNameDiaDanh(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_NAME)));
-            diaDanh.setImDiaDanh(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_IMAGE)));
-            diaDanh.setLatlng(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_LATLNG)));
-            diaDanh.setRegions(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_REGIONS))));
-            diaDanh.setCity(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_CITY)));
-            diaDanh.setFavotite(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_FAVORITE))));
-            diaDanh.setImage_int(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_IMAGE_INT)));
+
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                diaDanh = new DiaDanh();
+
+                int idIndex = cursor.getColumnIndex(DBManager.COLUMN_ID_DIADANH);
+                int nameIndex = cursor.getColumnIndex(DBManager.COLUMN_NAME);
+                int imageIndex = cursor.getColumnIndex(DBManager.COLUMN_IMAGE);
+                int latlngIndex = cursor.getColumnIndex(DBManager.COLUMN_LATLNG);
+                int regionsIndex = cursor.getColumnIndex(DBManager.COLUMN_REGIONS);
+                int cityIndex = cursor.getColumnIndex(DBManager.COLUMN_CITY);
+                int favoriteIndex = cursor.getColumnIndex(DBManager.COLUMN_FAVORITE);
+                int imageIntIndex = cursor.getColumnIndex(DBManager.COLUMN_IMAGE_INT);
+                int priceIndex = cursor.getColumnIndex(DBManager.COLUMN_PRICE_LOWERCASE);
+                int quantityIndex = cursor.getColumnIndex(DBManager.COLUMN_QUANTITY);
+
+                if (idIndex != -1) {
+                    diaDanh.setIdDiaDanh(cursor.getInt(idIndex));
+                }
+                if (nameIndex != -1) {
+                    diaDanh.setNameDiaDanh(cursor.getString(nameIndex));
+                }
+                if (imageIndex != -1) {
+                    diaDanh.setImDiaDanh(cursor.getString(imageIndex));
+                }
+                if (latlngIndex != -1) {
+                    diaDanh.setLatlng(cursor.getString(latlngIndex));
+                }
+                if (regionsIndex != -1) {
+                    diaDanh.setRegions(cursor.getInt(regionsIndex));
+                }
+                if (cityIndex != -1) {
+                    diaDanh.setCity(cursor.getString(cityIndex));
+                }
+                if (favoriteIndex != -1) {
+                    diaDanh.setFavotite(cursor.getInt(favoriteIndex));
+                }
+                if (imageIntIndex != -1) {
+                    diaDanh.setImage_int(cursor.getString(imageIntIndex));
+                }
+                if (priceIndex != -1) {
+                    diaDanh.setPrice(cursor.getInt(priceIndex));
+                }
+                if (quantityIndex != -1) {
+                    diaDanh.setQuantity(cursor.getInt(quantityIndex));
+                }
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
+
         return diaDanh;
     }
+
     public long editDiadanh (DiaDanh diaDanh){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -290,7 +392,7 @@ public class DBManager extends SQLiteOpenHelper {
         return ketqua;
     }
 
-    public int editDiaDanh(int id, String name, String image, String latlng, int region, String city, int favorite) {
+    public int editDiaDanh(int id, String name, String image, String latlng, int region, String city, int favorite, int price, int quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DBManager.COLUMN_ID_DIADANH, id);
@@ -300,6 +402,8 @@ public class DBManager extends SQLiteOpenHelper {
         values.put(DBManager.COLUMN_REGIONS, region);
         values.put(DBManager.COLUMN_CITY, city);
         values.put(DBManager.COLUMN_FAVORITE, favorite);
+        values.put(DBManager.COLUMN_PRICE, price);
+        values.put(DBManager.COLUMN_QUANTITY, quantity);
         String sql = "SELECT * FROM " + DBManager.TABLE_DIADANH + " WHERE " + DBManager.COLUMN_ID_DIADANH + " = " + id;
         Cursor cursor = db.rawQuery(sql, null);
         if (cursor.getCount() > 0) {
@@ -317,7 +421,7 @@ public class DBManager extends SQLiteOpenHelper {
         }
     }
 
-    public int addDiaDanh(String name, String image, String latlng, int region, String city, int favorite) {
+    public int addDiaDanh(String name, String image, String latlng, int region, String city, int favorite, int price, int quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DBManager.COLUMN_NAME, name);
@@ -326,6 +430,8 @@ public class DBManager extends SQLiteOpenHelper {
         values.put(DBManager.COLUMN_REGIONS, region);
         values.put(DBManager.COLUMN_CITY, city);
         values.put(DBManager.COLUMN_FAVORITE, favorite);
+        values.put(DBManager.COLUMN_PRICE, price);
+        values.put(DBManager.COLUMN_QUANTITY, quantity);
         long result = db.insert(DBManager.TABLE_DIADANH, null, values);
         if (result == -1) {
             return 0;
@@ -370,8 +476,10 @@ public class DBManager extends SQLiteOpenHelper {
             String city = cursor.getString(5);
             int favorite = cursor.getInt(6);
             String imageInt = cursor.getString(7);
+            int price = cursor.getInt(8);
+            int quantity = cursor.getInt(9);
             list.add(new DiaDanh(idDiaDanh, nameDiaDanh, imDiaDanh, imageInt,
-                    latlng, city, regions, favorite));
+                    latlng, city, regions, favorite, price,quantity));
         }
         return list;
     }
@@ -438,6 +546,8 @@ public class DBManager extends SQLiteOpenHelper {
             diaDanh.setCity(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_CITY)));
             diaDanh.setRegions(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_REGIONS))));
             diaDanh.setFavotite(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_FAVORITE))));
+//            diaDanh.setPrice(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_PRICE))));
+//            diaDanh.setQuantity(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_QUANTITY))));
 
         }
         Log.d("ketqua", String.valueOf(diaDanh));
@@ -463,6 +573,8 @@ public class DBManager extends SQLiteOpenHelper {
             diaDanh.setRegions(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_REGIONS))));
             diaDanh.setFavotite(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_FAVORITE))));
             diaDanh.setCity(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_CITY)));
+           //diaDanh.setPrice(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_PRICE))));
+           // diaDanh.setQuantity(Integer.parseInt(cursor.getString(cursor.getColumnIndex(DBManager.COLUMN_QUANTITY))));
 
             list.add(diaDanh);
             cursor.moveToNext();
@@ -680,6 +792,44 @@ public class DBManager extends SQLiteOpenHelper {
         }
         Log.d("ketqua", String.valueOf(list));
         return list;
+    }
+    public Booking getBooking(int id_diadanh) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Booking booking = null;
+
+        String sql = "SELECT * FROM " + DBManager.TABLE_DIADANH + " WHERE " + DBManager.COLUMN_ID_DIADANH + " = " + id_diadanh;
+        Cursor cursor = db.rawQuery(sql, null);
+
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                booking = new Booking();
+
+                int nameIndex = cursor.getColumnIndex(DBManager.COLUMN_NAME);
+                int imageIndex = cursor.getColumnIndex(DBManager.COLUMN_IMAGE);
+                int priceIndex = cursor.getColumnIndex(DBManager.COLUMN_PRICE);
+                int quantityIndex = cursor.getColumnIndex(DBManager.COLUMN_QUANTITY);
+
+                if (nameIndex != -1) {
+                    booking.setName(cursor.getString(nameIndex));
+                }
+                if (imageIndex != -1) {
+                    booking.setImage(cursor.getString(imageIndex));
+                }
+                if (priceIndex != -1) {
+                    booking.setPrice(cursor.getInt(priceIndex));
+                }
+                if (quantityIndex != -1) {
+                    booking.setQuantity(cursor.getInt(quantityIndex));
+                }
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        Log.d("ketqua", String.valueOf(booking));
+        return booking;
     }
 
     public Hotel getHotelDetail(int id){

@@ -9,12 +9,30 @@ public class DiaDanh {
 	private String city;
 	private int regions;
 	private int favotite;
+	private int price;
+	private int quantity;
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
 
 	public DiaDanh() {
 
 	}
 
-	public DiaDanh(int idDiaDanh, String nameDiaDanh, String imDiaDanh, String image_int, String latlng, String city, int regions, int favotite) {
+	public DiaDanh(int idDiaDanh, String nameDiaDanh, String imDiaDanh, String image_int, String latlng, String city, int regions, int favotite, int price, int quantity) {
 		this.idDiaDanh = idDiaDanh;
 		this.nameDiaDanh = nameDiaDanh;
 		this.imDiaDanh = imDiaDanh;
@@ -23,6 +41,8 @@ public class DiaDanh {
 		this.city = city;
 		this.regions = regions;
 		this.favotite = favotite;
+		this.price = price;
+		this.quantity = quantity;
 	}
 
 	public int getIdDiaDanh() {

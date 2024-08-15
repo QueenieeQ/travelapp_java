@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Base64;
@@ -46,6 +48,7 @@ public class DiaDanhActivity extends AppCompatActivity implements ViewPager.OnPa
     private ItemPagerAdapter adapter;
     private String[] imageResource;
     int count = 0;
+    private TextView tvBooking;
     DBManager db;
     String image;
     Bitmap bitmap, bitmap1, bitmap2, bitmap3, bitmap4, bitmap5;
@@ -60,6 +63,7 @@ public class DiaDanhActivity extends AppCompatActivity implements ViewPager.OnPa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diadanh);
         ButterKnife.bind(this);
+        tvBooking = findViewById(R.id.tvBooking);
         id_diadanh = getIntent().getIntExtra("id_diadanh", 1);
         db = new DBManager(this);
         diaDanh = db.getDiaDanhDetail(id_diadanh);
@@ -76,6 +80,11 @@ public class DiaDanhActivity extends AppCompatActivity implements ViewPager.OnPa
         setUiPage();
 
         setOnClick();
+
+
+
+
+
         //time for auto
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -123,11 +132,16 @@ public class DiaDanhActivity extends AppCompatActivity implements ViewPager.OnPa
         });
 
 
-
     }
 
 //	}
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
     public void downImage() {
         listBmp = new ArrayList<>();
@@ -150,6 +164,7 @@ public class DiaDanhActivity extends AppCompatActivity implements ViewPager.OnPa
         tvAnUong.setOnClickListener(this);
         tvPhuongTien.setOnClickListener(this);
         tvNhaNghi.setOnClickListener(this);
+        tvBooking.setOnClickListener(this);
     }
 
     private void setUiPage() {
@@ -232,6 +247,11 @@ public class DiaDanhActivity extends AppCompatActivity implements ViewPager.OnPa
                 startActivity(iHotel);
                 break;
 
+            case R.id.tvBooking:
+                Intent booking = new Intent(DiaDanhActivity.this, BookingActivity.class);
+                booking.putExtra("id_diadanh", id_diadanh);
+                startActivity(booking);
+                break;
         }
     }
 
