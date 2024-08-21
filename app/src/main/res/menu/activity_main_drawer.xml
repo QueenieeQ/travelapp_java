@@ -22,6 +22,10 @@
             android:id="@+id/nav_booked_tour"
             android:icon="@drawable/ic_travel"
             android:title="Tour đã đặt"></item>
+        <item
+            android:id="@+id/nav_bao_cao"
+            android:icon="@drawable/ic_calendar"
+            android:title="Báo cáo"></item>
     </group>
 
 

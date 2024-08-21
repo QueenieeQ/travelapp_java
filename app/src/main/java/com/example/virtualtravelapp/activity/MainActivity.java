@@ -12,6 +12,7 @@ import android.os.Handler;
 
 import com.example.virtualtravelapp.fragment.AccountFragment;
 import com.example.virtualtravelapp.fragment.AdminFragment;
+import com.example.virtualtravelapp.fragment.BaoCaoFragment;
 import com.example.virtualtravelapp.fragment.BookedTourFragment;
 import com.google.android.material.navigation.NavigationView;
 import androidx.fragment.app.Fragment;
@@ -112,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
 				case R.id.nav_booked_tour:
 					drawerLayout.closeDrawers();
 					startFragment(new BookedTourFragment());
+					return true;
+				case R.id.nav_bao_cao:
+					drawerLayout.closeDrawers();
+					startFragment(new BaoCaoFragment());
 					return true;
 				case R.id.nav_account:
 					drawerLayout.closeDrawers();

@@ -1,17 +1,19 @@
 package com.example.virtualtravelapp.adapter;
 
-import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.virtualtravelapp.R;
 import com.example.virtualtravelapp.model.Booking;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class BookTourAdapter extends RecyclerView.Adapter<BookTourAdapter.BookTourViewHolder> {
     private List<Booking> bookTourList;
@@ -33,7 +35,7 @@ public class BookTourAdapter extends RecyclerView.Adapter<BookTourAdapter.BookTo
     public void onBindViewHolder(@NonNull BookTourViewHolder holder, int position) {
         Booking booking = bookTourList.get(position);
         holder.nameTextView.setText(booking.getName());
-        holder.priceTextView.setText(String.format("%d VND", booking.getPrice()));
+        updatePriceTextView(holder.priceTextView, booking.getPrice());
 
         holder.itemView.setOnLongClickListener(v -> {
             if (onItemLongClickListener != null) {
@@ -61,6 +63,12 @@ public class BookTourAdapter extends RecyclerView.Adapter<BookTourAdapter.BookTo
 
     public interface OnItemLongClickListener {
         void onItemLongClick(int position);
+    }
+
+    public void updatePriceTextView(TextView textView, int amount) {
+        NumberFormat currencyFormat = NumberFormat.getInstance(Locale.getDefault());
+        String formattedAmount = currencyFormat.format(amount);
+        textView.setText(String.format("Giá: %s VND", formattedAmount));
     }
 
     public static class BookTourViewHolder extends RecyclerView.ViewHolder {
