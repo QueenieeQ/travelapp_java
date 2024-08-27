@@ -123,6 +123,8 @@ public class BookingActivity extends AppCompatActivity {
         newBooking.setName(name);
         newBooking.setPrice(price);
         newBooking.setQuantity(quantity);
+        db.reduceBookTourQuantity(newBooking.getId());
+        db.decrementDiaDanhQuantity(id_diadanh);
         db.addBooking(newBooking);
     }
 }

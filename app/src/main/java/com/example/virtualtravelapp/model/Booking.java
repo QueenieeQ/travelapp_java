@@ -1,9 +1,19 @@
 package com.example.virtualtravelapp.model;
 
 public class Booking {
+    private int id;
     private String name;
 
     private String image;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private int price;
     private int quantity;
 

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.example.virtualtravelapp.model.Booking;
@@ -167,12 +168,36 @@ addNewColumns(db);
 
     public void addBooking(Booking booking) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME, booking.getName());
-        values.put(COLUMN_PRICE, booking.getPrice());
-        values.put(COLUMN_QUANTITY, booking.getQuantity());
+        String name = booking.getName();
 
-        db.insert(TABLE_BOOKING, null, values);
+        // Check if a booking with the same name already exists
+        String query = "SELECT id, quantity FROM " + TABLE_BOOKING + " WHERE " + COLUMN_NAME + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{name});
+
+        if (cursor.moveToFirst()) {
+            // If the name exists, get the id and update the quantity
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            int currentQuantity = cursor.getInt(cursor.getColumnIndex(COLUMN_QUANTITY));
+
+            // Reduce quantity if it's greater than 0
+            if (currentQuantity > 0) {
+                reduceBookTourQuantity(id);
+                System.out.println("Quantity reduced for existing booking.");
+            } else {
+                System.out.println("Quantity is already zero. Cannot reduce further.");
+            }
+        } else {
+            // If the name does not exist, add a new booking
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_NAME, name);
+            values.put(COLUMN_PRICE, booking.getPrice());
+            values.put(COLUMN_QUANTITY, booking.getQuantity());
+
+            db.insert(TABLE_BOOKING, null, values);
+            System.out.println("New booking added.");
+        }
+
+        cursor.close();
         db.close();
     }
 
@@ -196,6 +221,25 @@ addNewColumns(db);
         cursor.close();
         db.close();
         return bookTours;
+    }
+
+    public boolean reduceBookTourQuantity(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean result = false;
+        try {
+            // Update query to decrease the quantity by 1
+            String updateQuery = "UPDATE booktour SET quantity = quantity - 1 WHERE id = ? AND quantity > 0";
+            SQLiteStatement statement = db.compileStatement(updateQuery);
+            statement.bindLong(1, id);
+
+            int affectedRows = statement.executeUpdateDelete();
+            result = affectedRows > 0; // Return true if a row was affected, meaning the quantity was reduced
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return result;
     }
 
     public void deleteBooking(Booking booking) {
@@ -390,6 +434,24 @@ addNewColumns(db);
         Log.v("InsertDatabase","Ket qua :" + ketqua);
 
         return ketqua;
+    }
+    public long decrementDiaDanhQuantity(int diaDanhId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        String updateQuery = "UPDATE " + DBManager.TABLE_DIADANH +
+                " SET " + DBManager.COLUMN_QUANTITY + " = " +
+                DBManager.COLUMN_QUANTITY + " - 1 " +
+                " WHERE " + DBManager.COLUMN_ID_DIADANH + " = ? " +
+                " AND " + DBManager.COLUMN_QUANTITY + " > 0";
+
+        SQLiteStatement statement = db.compileStatement(updateQuery);
+        statement.bindLong(1, diaDanhId);
+
+        long result = statement.executeUpdateDelete();
+
+        db.close();
+        return result;
     }
 
     public int editDiaDanh(int id, String name, String image, String latlng, int region, String city, int favorite, int price, int quantity) {
@@ -805,10 +867,14 @@ addNewColumns(db);
                 booking = new Booking();
 
                 int nameIndex = cursor.getColumnIndex(DBManager.COLUMN_NAME);
+               // int idIndex = cursor.getColumnIndex(DBManager.COLUMN_ID_LOWERCASE);
                 int imageIndex = cursor.getColumnIndex(DBManager.COLUMN_IMAGE);
                 int priceIndex = cursor.getColumnIndex(DBManager.COLUMN_PRICE);
                 int quantityIndex = cursor.getColumnIndex(DBManager.COLUMN_QUANTITY);
 
+//                if (nameIndex != -1) {
+//                    booking.setId(cursor.getInt(idIndex));
+//                }
                 if (nameIndex != -1) {
                     booking.setName(cursor.getString(nameIndex));
                 }
