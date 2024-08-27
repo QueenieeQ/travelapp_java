@@ -103,6 +103,15 @@
         <activity
             android:name=".activity.AdminDiaDiemActivity"
             android:theme="@style/ThemeDiaDanh"></activity>
+        <activity
+            android:name=".activity.AdminGioiThieuActivity"
+            android:theme="@style/ThemeDiaDanh"></activity>
+        <activity
+            android:name=".activity.AdminHotelActivity"
+            android:theme="@style/ThemeDiaDanh"></activity>
+        <activity
+            android:name=".activity.AdminPhuongTienActivity"
+            android:theme="@style/ThemeDiaDanh"></activity>
     </application>
 
 </manifest>

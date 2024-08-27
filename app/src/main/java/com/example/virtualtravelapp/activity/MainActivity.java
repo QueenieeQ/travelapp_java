@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 						showDialogInfo();
 						return true;
 					case R.id.nav_send_mail:
-						Intent emailIntent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "ngocphongstudent2611@gmail.com", null));
+						Intent emailIntent = new Intent("android.intent.action.SENDTO", Uri.fromParts("mailto", "hello@quyninh.com", null));
 						emailIntent.putExtra("android.intent.extra.SUBJECT", "Phản hồi");
 						startActivity(Intent.createChooser(emailIntent, "Phản hồi"));
 						break;

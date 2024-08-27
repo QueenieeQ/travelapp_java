@@ -13,6 +13,8 @@ import com.example.virtualtravelapp.R;
 import com.example.virtualtravelapp.activity.AdminDiaDanhActivity;
 import com.example.virtualtravelapp.activity.AdminDiaDiemActivity;
 import com.example.virtualtravelapp.activity.AdminDoAnActivity;
+import com.example.virtualtravelapp.activity.AdminGioiThieuActivity;
+import com.example.virtualtravelapp.activity.AdminPhuongTienActivity;
 
 public class AdminFragment extends Fragment {
     CardView crdLocation, crdPlace, crdIntro, crdRestaurant, crdHotel, crdVehicle, crdExper, crdAccount;
@@ -47,6 +49,27 @@ public class AdminFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), AdminDiaDiemActivity.class);
+                startActivity(intent);
+            }
+        }));
+        crdIntro.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AdminGioiThieuActivity.class);
+                startActivity(intent);
+            }
+        }));
+        crdHotel.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AdminGioiThieuActivity.class);
+                startActivity(intent);
+            }
+        }));
+        crdVehicle.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AdminPhuongTienActivity.class);
                 startActivity(intent);
             }
         }));
