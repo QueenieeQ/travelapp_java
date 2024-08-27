@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.virtualtravelapp.R;
 import com.example.virtualtravelapp.activity.AdminDiaDanhActivity;
+import com.example.virtualtravelapp.activity.AdminDiaDiemActivity;
 import com.example.virtualtravelapp.activity.AdminDoAnActivity;
 
 public class AdminFragment extends Fragment {
@@ -39,6 +40,13 @@ public class AdminFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), AdminDoAnActivity.class);
+                startActivity(intent);
+            }
+        }));
+        crdPlace.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AdminDiaDiemActivity.class);
                 startActivity(intent);
             }
         }));

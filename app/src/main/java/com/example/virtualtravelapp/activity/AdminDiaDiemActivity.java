@@ -7,21 +7,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.virtualtravelapp.R;
 import com.example.virtualtravelapp.adapter.AdminDiaDanhAdapter;
 import com.example.virtualtravelapp.database.DBManager;
-import com.example.virtualtravelapp.fragment.AdminFragment;
 import com.example.virtualtravelapp.model.DiaDanh;
 
 import java.util.ArrayList;
 
-public class AdminDoAnActivity extends AppCompatActivity {
+public class AdminDiaDiemActivity extends AppCompatActivity {
 
     ListView listView;
     Button btnThem;
@@ -33,7 +28,7 @@ public class AdminDoAnActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admindiadanh);
-        this.setTitle("Quản lý địa điểm ăn uống trong tour");
+        this.setTitle("Quản lý địa điểm vui chơi trong tour");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         database = new DBManager(this);
@@ -47,7 +42,7 @@ public class AdminDoAnActivity extends AppCompatActivity {
         btnThem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AdminDoAnActivity.this, InsertDoAnActivity.class);
+                Intent intent = new Intent(AdminDiaDiemActivity.this, InsertDoAnActivity.class);
                 startActivity(intent);
             }
         });

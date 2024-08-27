@@ -100,6 +100,9 @@
         <activity
             android:name=".activity.AdminDoAnActivity"
             android:theme="@style/ThemeDiaDanh"></activity>
+        <activity
+            android:name=".activity.AdminDiaDiemActivity"
+            android:theme="@style/ThemeDiaDanh"></activity>
     </application>
 
 </manifest>

@@ -27,7 +27,7 @@ public class DiaDanhFragment extends Fragment {
 		ButterKnife.bind(this,view);
 		viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 		tabLayout = (TabLayout) view.findViewById(R.id.tabs);
-		getActivity().setTitle("Địa danh Việt Nam");
+		getActivity().setTitle("Tour du lịch Việt Nam");
 		setViewPager(viewPager);
 		tabLayout.setupWithViewPager(viewPager);
 
