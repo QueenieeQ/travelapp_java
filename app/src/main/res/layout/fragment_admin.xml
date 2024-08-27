@@ -38,7 +38,7 @@
                     android:layout_below="@id/icon_location"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
-                    android:text="Địa danh"
+                    android:text="Tour"
                     android:textColor="#000"
                     android:textSize="24sp"></TextView>
             </RelativeLayout>
@@ -70,7 +70,7 @@
                     android:layout_below="@id/icon_place"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
-                    android:text="Điểm đến"
+                    android:text="Địa điểm"
                     android:textColor="#000"
                     android:textSize="24sp"></TextView>
             </RelativeLayout>
@@ -109,7 +109,7 @@
                     android:layout_below="@id/icon_introduce"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
-                    android:text="Giới thiệu"
+                    android:text="Giới thiệu về tour"
                     android:textColor="#000"
                     android:textSize="24sp"></TextView>
             </RelativeLayout>
@@ -180,7 +180,7 @@
                     android:layout_below="@id/icon_hotel"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
-                    android:text="Khách sạn"
+                    android:text="Nghỉ dưỡng"
                     android:textColor="#000"
                     android:textSize="24sp"></TextView>
             </RelativeLayout>

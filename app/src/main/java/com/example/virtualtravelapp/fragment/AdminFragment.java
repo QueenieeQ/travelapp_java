@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.virtualtravelapp.R;
 import com.example.virtualtravelapp.activity.AdminDiaDanhActivity;
+import com.example.virtualtravelapp.activity.AdminDoAnActivity;
 
 public class AdminFragment extends Fragment {
     CardView crdLocation, crdPlace, crdIntro, crdRestaurant, crdHotel, crdVehicle, crdExper, crdAccount;
@@ -34,6 +35,13 @@ public class AdminFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        crdRestaurant.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AdminDoAnActivity.class);
+                startActivity(intent);
+            }
+        }));
         return root;
     }
 }

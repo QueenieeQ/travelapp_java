@@ -47,7 +47,7 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:label="Du Lịch Ảo"
+            android:label="Đặt tour du lịch"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme">
         </activity>
@@ -96,6 +96,9 @@
             android:theme="@style/ThemeDiaDanh"></activity>
         <activity
             android:name=".activity.AdminDiaDanhActivity"
+            android:theme="@style/ThemeDiaDanh"></activity>
+        <activity
+            android:name=".activity.AdminDoAnActivity"
             android:theme="@style/ThemeDiaDanh"></activity>
     </application>
 

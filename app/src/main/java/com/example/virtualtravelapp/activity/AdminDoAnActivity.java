@@ -21,7 +21,7 @@ import com.example.virtualtravelapp.model.DiaDanh;
 
 import java.util.ArrayList;
 
-public class AdminDiaDanhActivity extends AppCompatActivity {
+public class AdminDoAnActivity extends AppCompatActivity {
 
     ListView listView;
     Button btnThem;
@@ -47,7 +47,7 @@ public class AdminDiaDanhActivity extends AppCompatActivity {
         btnThem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AdminDiaDanhActivity.this, InsertDoAnActivity.class);
+                Intent intent = new Intent(AdminDoAnActivity.this, InsertDoAnActivity.class);
                 startActivity(intent);
             }
         });
